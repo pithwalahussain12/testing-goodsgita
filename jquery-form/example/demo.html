@@ -1,0 +1,228 @@
+<?php
+/*
+$xml ='<?xml version="1.0" encoding="UTF-8"?>
+<Request>
+    <Source>
+        <RequestorID  Client="2318" EMailAddress="XML@GOKUEST.COM" Password="PASS"/>
+        <RequestorPreferences
+            Country = "GB"
+            Currency = "USD"
+            Language = "en">
+            <RequestMode>SYNCHRONOUS</RequestMode>
+           
+        </RequestorPreferences>
+    </Source>
+    <RequestDetails>
+        <SearchHotelPriceRequest>
+            <ItemDestination DestinationCode = "ADL" DestinationType = "city"/>
+            <PeriodOfStay>
+                <CheckInDate>2018-03-20</CheckInDate>
+                <Duration>2</Duration>
+            </PeriodOfStay>
+            <Rooms>
+                <Room
+                    Code = "SB"
+                    NumberOfCots = "0"
+                    NumberOfRooms = "1">
+                    <ExtraBeds/>
+                </Room>
+            </Rooms>
+        </SearchHotelPriceRequest>
+    </RequestDetails>
+</Request>';
+
+
+
+$url = 'https://interface.demo.gta-travel.com/wbsapi/RequestListenerServlet';
+   //setting the curl parameters.
+ $headers = array(
+    "Content-type: text/xml;charset=\"utf-8\"",
+    "Accept: text/xml",
+    "Cache-Control: no-cache",
+    "Pragma: no-cache",
+    "SOAPAction: \"run\""
+ );
+        try{
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            // send xml request to a server
+            curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_POSTFIELDS,  $xml);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_VERBOSE, 0);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+     
+            $data = curl_exec($ch);
+            
+             //print_r($data);die;
+            if($data === false){
+                $error = curl_error($ch);
+           
+                echo '<pre>';
+                 print_r($error); die;
+                echo '<pre>';
+                die('error occured');
+            }else{
+               
+               $xmlData = simplexml_load_string($data);
+                echo '<pre>';
+                print_r($xmlData);die;
+               $alldata = $xmlData->ResponseDetails->SearchHotelPriceResponse->HotelDetails->Hotel->Item;
+               
+               foreach ($alldata  as $row)
+               {
+                 echo $row->code; 
+                 echo $row->LocationDetails.'<br/>';
+               }
+            
+            }
+            curl_close($ch);
+        }catch(Exception  $e){
+            echo 'Message: ' .$e->getMessage();die("Error");
+    }
+*/
+
+/*
+ $xml ='<?xml version="1.0" encoding="UTF-8"?>
+<Request>
+  <Source>
+  <RequestorID Client="2318" EMailAddress="XML@GOKUEST.COM" Password="PASS"/>
+    <RequestorPreferences Language="en">
+		  <RequestMode>SYNCHRONOUS</RequestMode>
+    </RequestorPreferences>
+  </Source>
+	<RequestDetails>
+		<SearchLinkRequest ItemType="hotel" LinkType="image">
+			<ItemDestination DestinationType="city" DestinationCode="ADL" />
+			<ItemCode>HOL2</ItemCode>
+		</SearchLinkRequest>
+	</RequestDetails>
+</Request>';
+
+
+$url = 'https://interface.demo.gta-travel.com/wbsapi/RequestListenerServlet';
+ $headers = array(
+    "Content-type: text/xml;charset=\"utf-8\"",
+    "Accept: text/xml",
+    "Cache-Control: no-cache",
+    "Pragma: no-cache",
+    "SOAPAction: \"run\""
+ );
+        try{
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            // send xml request to a server
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_POSTFIELDS,  $xml);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_VERBOSE, 0);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+     
+            $data = curl_exec($ch);
+            
+             //print_r($data);die;
+            if($data === false){
+                $error = curl_error($ch);
+           
+                echo '<pre>';
+                 print_r($error); die;
+                echo '<pre>';
+                die('error occured');
+            }else{
+               $xmlData = simplexml_load_string($data);
+                echo '<pre>';
+                print_r($xmlData);die;
+               
+			   $alldata = $xmlData->ResponseDetails->SearchLinkResponse ->LinkDetails->LinkDetail->Links->ImageLinks->ImageLink ;
+			   print_r($alldata); die;
+                  foreach ($alldata  as $row)
+               {         
+                 echo $row->ThumbNail; 
+                 echo $row->Image.'<br/>';
+               }
+			   
+            }
+            curl_close($ch);
+        }catch(Exception  $e){
+            echo 'Message: ' .$e->getMessage();die("Error");
+    }
+*/
+
+/*
+
+$xml ='<?xml version="1.0" encoding="UTF-8"?>
+<Request>
+  <Source>
+<RequestorID Client="2318" EMailAddress="XML@GOKUEST.COM" Password="PASS" />
+    <RequestorPreferences Language="en">
+		  <RequestMode>SYNCHRONOUS</RequestMode> 
+    </RequestorPreferences>
+  </Source>
+	<RequestDetails>
+		<SearchCityRequest CountryCode="GB">
+			<CityName>ATHENS</CityName>
+		</SearchCityRequest>
+	</RequestDetails>
+</Request>';
+
+
+
+$url = 'https://interface.demo.gta-travel.com/wbsapi/RequestListenerServlet';
+   //setting the curl parameters.
+ $headers = array(
+    "Content-type: text/xml;charset=\"utf-8\"",
+    "Accept: text/xml",
+    "Cache-Control: no-cache",
+    "Pragma: no-cache",
+    "SOAPAction: \"run\""
+ );
+        try{
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            // send xml request to a server
+            curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_POSTFIELDS,  $xml);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_VERBOSE, 0);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+     
+            $data = curl_exec($ch);
+            
+             //print_r($data);die;
+            if($data === false){
+                $error = curl_error($ch);
+           
+                echo '<pre>';
+                 print_r($error); die;
+                echo '<pre>';
+                die('error occured');
+            }else{
+               
+               $xmlData = simplexml_load_string($data);
+                echo '<pre>';
+                print_r($xmlData);die;
+               
+			   $alldata = $xmlData->ResponseDetails->SearchCityResponse ->CityDetails->City;
+			  // print_r($alldata);die;
+               foreach ($alldata  as $row)
+               {                
+                 echo $row->Code.'<br/>';
+               }
+            
+            }
+            curl_close($ch);
+        }catch(Exception  $e){
+            echo 'Message: ' .$e->getMessage();die("Error");
+    }
+	*/
+	
+?>

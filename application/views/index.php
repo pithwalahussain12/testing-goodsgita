@@ -1,0 +1,1 @@
+<?php header('location:http://devma.techdiligents.com/koreatown/koreatown-administrator/home'); ?>
